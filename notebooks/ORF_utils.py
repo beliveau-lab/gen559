@@ -16,30 +16,30 @@ def get_ORFs(seq):
         # Check if current window is a start codon.
         if window == "ATG":
 
-            ## If so, search for a stop codon.
+            # If so, search for a stop codon.
+            for j in range(i, len(seq), 3):
+                current_codon = seq[j:j+3]
+                if current_codon in ["TGA", "TAA", "TAG"]:
 
-            # Create and populate a list of in-frame codons.
-            in_frame_codons = []
-            for j in range(i, len(seq)-i, 3):
-                in_frame_codons.append(seq[j:j+3])
+                    # If found, add ORF info to output list.
+                    ORF_seq = seq[i:j+3]
+                    AA_len = len(ORF_seq)/ 3 - 1
 
-            # Search for a stop codon in in_frame_codons.
-            if "TGA" or "TAA" or "TAG" in in_frame_codons:
-                for k in range(0, len(in_frame_codons), 1):
-                    if in_frame_codons[k] in ["TGA", "TAA", "TAG"]:
+                    # Only report if protein is >1 AA:
+                    if AA_len > 1:
+                        output_list.append('%s\t%s' % (ORF_seq, AA_len))
 
-                        # If found, add ORF info to output list.
-                        ORF_seq = seq[i:k*3+3]
-                        ORF_len = len(ORF_seq)/ 3 - 1
-                        output_list.append('%s\t%s' % (ORF_seq, ORF_len))
+                    # Update idx variable.
+                    idx = i
 
-                        # Update idx variable.
-                        idx = i
+                    # break loop
+                    break
 
     # Check if output list is empty:
     if len(output_list) == 0:
         return 'Warning, no valid ORFs found!'
 
+    # If not, return list of ORFs their lengths.
     else:
         return output_list
 
