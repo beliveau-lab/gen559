@@ -20,7 +20,7 @@ def extract_variation(file, chrom):
             and len(line.strip().split("\t")[4]) == 1]
 
         # Extract insertions if args.ins is True.
-        elif args.insertion is True:
+        if args.insertion is True:
 
             # Create and populate of extracted variants. Skip header lines.
             # Only consider line if length of 'REF' = 1 and length of 'ALT'
